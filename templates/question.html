@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block link %}
+    <link rel="stylesheet" href="{% static "css/question_style.css" %}">
+    <link rel="stylesheet" href="{% static "css/comment_card_style.css" %}">
+{% endblock link %}
+
+{% block content %}
+    <div class="content">
+        <div class="question">
+            <div class="header">
+                <div class="author">
+                    <a href=""><img href="#" src="{% static "img/default_avatar_img.png" %}" alt="" class="avatar_on_question"></a>
+                    <a class="link-success login_value" href="#">{{ question.author }}</a>
+                </div>
+                <p class="lead question_title">
+                    По чему плавают утки?
+                </p>
+                <div class="likes">
+                    <p class="count_likes">+{{ question.count_likes }}</p>
+                    <button class="like_btn" id="like_btn"><img src="{% static "img/like_smile.png" %}" alt=""></button>
+                    <button class="like_btn"><img src="{% static "img/dislike_smile.png" %}" alt=""></button>
+                    <p class="count_dislikes">-{{ question.count_dislikes }}</p>
+                    <p class="date_posting text-muted"> {{ question.date_posting }}</p>
+                </div>
+            </div>
+            <hr>
+            <p class="question_text">{{ question.question_text }}</p>
+        </div>
+        <div class="form-floating comment_form">
+            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+            <label for="floatingTextarea2">Комментарий</label>
+        </div>
+        <button type="button" class="btn btn-outline-primary send_comment_btn">Отправить</button>
+        <div class="all_comments">
+            <p class="lead comments_title">
+                Комментарии ({{ question.count_comments }})
+            </p>
+            <div class="comments_block">
+                {% for comment in question.comments %}
+                    {% include "incl/comment_card.html" %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,31 @@
+.d-flex {
+    width: 30%;
+    margin-right: 25%;
+}
+
+.avatar_img > img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
+
+.bg-light {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.avatar_img_container {
+    margin-right: 2% !important;
+}
+
+.dropdown-menu {
+    margin-left: -80px;
+}
+
+.ask_btn {
+    margin-right: 3%;
+}
+
+.logout_link {
+    color: red;
+}

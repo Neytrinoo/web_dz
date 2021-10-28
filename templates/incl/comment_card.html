@@ -1,0 +1,26 @@
+{% load static %}
+
+{% load static %}
+
+<div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+        <div class="col-md-4" href="#">
+            <a href="#">
+                <img src="{% static "img/question_default_img.jpg" %}" class="img-fluid rounded-start avatar_on_comment_card" alt="...">
+            </a>
+            <a class="link-success login_value" href="#">{{ comment.author }}</a>
+        </div>
+        <div class="col-md-8">
+            <div class="card-body question_texts">
+                <p class="card-text comment_text">{{ comment.comment_text }}</p>
+            </div>
+            <div class="likes">
+                <p class="count_likes">+{{ comment.count_likes }}</p>
+                <button class="like_btn" id="like_btn"><img src="{% static "img/like_smile.png" %}" alt=""></button>
+                <button class="like_btn"><img src="{% static "img/dislike_smile.png" %}" alt=""></button>
+                <p class="count_dislikes">-{{ comment.count_dislikes }}</p>
+            </div>
+            <p class="text-muted comment_date_posting">{{ comment.date_posting }}</p>
+        </div>
+    </div>
+</div>

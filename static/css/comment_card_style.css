@@ -1,0 +1,99 @@
+.avatar_on_comment_card {
+    border-radius: 50% !important;
+    margin-bottom: 3px;
+    width: 70%;
+    margin-top: 20px;
+}
+
+.card {
+    max-width: 1200px !important;
+    margin-bottom: 15px;
+    /*max-height: 200px;*/
+}
+
+.col-md-4 {
+    display: block;
+    width: 15%;
+    text-align: center;
+    /*margin-top: 15px;*/
+    /*margin-left: 15px;*/
+}
+
+.col-md-8 {
+    width: 83%;
+}
+
+.row {
+    height: 200px;
+    padding-top: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.login_value {
+    text-align: center;
+}
+
+.question_texts {
+    padding-top: 10px;
+    margin-bottom: 2px;
+    padding-left: 20px;
+    height: 138px;
+}
+
+.comment_text {
+    font-size: 1.15rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+
+.likes {
+    float: left;
+    margin-left: 7px;
+    margin-top: 10px;
+}
+
+.likes > p {
+    display: inline;
+    font-size: 1.15rem;
+    font-weight: bold;
+}
+
+.count_likes {
+    color: #3cff00;
+    margin-right: 3px;
+}
+
+.count_dislikes {
+    color: #ff0000;
+    margin-left: 13px;
+}
+
+.like_btn {
+    width: 30px;
+    height: 30px;
+    outline: none;
+    border: 0;
+    background: transparent;
+}
+
+.like_btn > img {
+    width: inherit;
+    height: inherit;
+}
+
+#like_btn {
+    margin-right: 10px;
+}
+
+.comment_date_posting {
+    position: relative;
+    display: block !important;
+    font-size: 1.1rem !important;
+    margin-right: 10px;
+    float: right;
+    font-weight: 400 !important;
+}

@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Задал вопросик получил ответик</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+    <link rel="stylesheet" href="{% static "css/header_styles.css" %}">
+    {% block link %}
+    {% endblock link %}
+    <script src="{% static "js/bootstrap.bundle.js" %}"></script>
+</head>
+<body>
+{% include "incl/header.html" %}
+{% block content %}
+{% endblock content %}
+{% include "incl/footer.html" %}
+</body>
+</html>
