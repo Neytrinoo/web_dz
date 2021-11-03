@@ -1,0 +1,43 @@
+.content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.form-label {
+    font-size: 1.25rem;
+    font-weight: 400;
+}
+
+.question_form {
+    margin-top: 40px;
+    width: inherit;
+    height: inherit;
+}
+
+#questionTitle {
+    font-size: 1.15rem;
+}
+
+#questionText {
+    min-height: 700px;
+    max-height: 700px;
+    font-size: 1.15rem;
+}
+
+.col-form-label {
+    font-size: 1.15rem;
+    width: 60px;
+}
+
+#inputTags {
+    float: left;
+}
+
+.col-sm-10 {
+    width: 1164px;
+}
+
+.send_btn {
+    width: 1200px;
+    margin: 0 auto;
+}

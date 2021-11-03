@@ -8,19 +8,19 @@
             <a href="#">
                 <img src="{% static "img/question_default_img.jpg" %}" class="img-fluid rounded-start avatar_on_comment_card" alt="...">
             </a>
-            <a class="link-success login_value" href="#">{{ comment.author }}</a>
+            <a class="link-success login_value" href="#">{{ answer.author.user.username }}</a>
         </div>
         <div class="col-md-8">
             <div class="card-body question_texts">
-                <p class="card-text comment_text">{{ comment.comment_text }}</p>
+                <p class="card-text comment_text">{{ answer.text }}</p>
             </div>
             <div class="likes">
-                <p class="count_likes">+{{ comment.count_likes }}</p>
+                <p class="count_likes">+{{ answer.get_count_likes }}</p>
                 <button class="like_btn" id="like_btn"><img src="{% static "img/like_smile.png" %}" alt=""></button>
                 <button class="like_btn"><img src="{% static "img/dislike_smile.png" %}" alt=""></button>
-                <p class="count_dislikes">-{{ comment.count_dislikes }}</p>
+                <p class="count_dislikes">-{{ answer.get_count_dislikes }}</p>
             </div>
-            <p class="text-muted comment_date_posting">{{ comment.date_posting }}</p>
+            <p class="text-muted comment_date_posting">{{ answer.date_publish }}</p>
         </div>
     </div>
 </div>

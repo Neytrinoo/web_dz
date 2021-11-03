@@ -13,21 +13,21 @@
             <div class="header">
                 <div class="author">
                     <a href=""><img href="#" src="{% static "img/default_avatar_img.png" %}" alt="" class="avatar_on_question"></a>
-                    <a class="link-success login_value" href="#">{{ question.author }}</a>
+                    <a class="link-success login_value" href="#">{{ question.author.user.username }}</a>
                 </div>
                 <p class="lead question_title">
-                    По чему плавают утки?
+                    {{ question.title }}
                 </p>
                 <div class="likes">
-                    <p class="count_likes">+{{ question.count_likes }}</p>
+                    <p class="count_likes">+{{ question.get_count_likes }}</p>
                     <button class="like_btn" id="like_btn"><img src="{% static "img/like_smile.png" %}" alt=""></button>
                     <button class="like_btn"><img src="{% static "img/dislike_smile.png" %}" alt=""></button>
-                    <p class="count_dislikes">-{{ question.count_dislikes }}</p>
-                    <p class="date_posting text-muted"> {{ question.date_posting }}</p>
+                    <p class="count_dislikes">-{{ question.get_count_dislikes }}</p>
+                    <p class="date_posting text-muted"> {{ question.date_publish }}</p>
                 </div>
             </div>
             <hr>
-            <p class="question_text">{{ question.question_text }}</p>
+            <p class="question_text">{{ question.text }}</p>
         </div>
         <div class="form-floating comment_form">
             <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
@@ -36,13 +36,29 @@
         <button type="button" class="btn btn-outline-primary send_comment_btn">Отправить</button>
         <div class="all_comments">
             <p class="lead comments_title">
-                Комментарии ({{ question.count_comments }})
+                Комментарии ({{ question.answers.count }})
             </p>
             <div class="comments_block">
-                {% for comment in question.comments %}
+                {% for answer in page_obj %}
                     {% include "incl/comment_card.html" %}
                 {% endfor %}
             </div>
         </div>
+        <nav aria-label="Page navigation example" class="pagination_nav">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page=1"><< First</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                {% endif %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last >></a></li>
+                {% endif %}
+            </ul>
+            <span class="current_page">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+        </nav>
     </div>
 {% endblock content %}

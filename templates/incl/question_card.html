@@ -6,20 +6,20 @@
             <a href="#">
                 <img src="{% static "img/question_default_img.jpg" %}" class="img-fluid rounded-start avatar_on_question_card" alt="...">
             </a>
-            <a class="link-success login_value" href="#">{{ question.author }}</a>
+            <a class="link-success login_value" href="#">{{ question.author.user.username }}</a>
         </div>
         <div class="col-md-8">
             <div class="card-body question_texts">
-                <h5 class="card-title"><a href="#">{{ question.question_title }}</a></h5>
-                <p class="card-text question_text">{{ question.question_text }}</p>
+                <h5 class="card-title"><a href="{{ question.get_absolute_url }}" class="question_title">{{ question.title }}</a></h5>
+                <p class="card-text question_text">{{ question.text }}</p>
             </div>
-            <a class="card-text answers" href="#"><small class="text-muted">Ответы({{ question.count_answers }})</small></a>
+            <a class="card-text answers" href="#"><small class="text-muted">Ответы({{ question.answers.count }})</small></a>
             <div class="badge bg-primary text-wrap tags_pre_text" style="width: 6rem;">
                 Теги:
             </div>
             <div class="tags_block">
-                {% for tag in question.tags %}
-                    <a href="#" class="link-info">{{ tag }}</a>
+                {% for tag in question.tags.all %}
+                    <a href="{{ tag.get_absolute_url }}" class="link-info">{{ tag.title }}</a>
                 {% endfor %}
 {#                <a href="#" class="link-info">огурцы</a>#}
 {#                <a href="#" class="link-info">слово_на_о</a>#}
@@ -28,10 +28,10 @@
 {#                <a href="#" class="link-info">для</a>#}
             </div>
             <div class="likes">
-                <p class="count_likes">+{{ question.count_likes }}</p>
+                <p class="count_likes">+{{ question.get_count_likes }}</p>
                 <button class="like_btn" id="like_btn"><img src="{% static "img/like_smile.png" %}" alt=""></button>
                 <button class="like_btn"><img src="{% static "img/dislike_smile.png" %}" alt=""></button>
-                <p class="count_dislikes">-{{ question.count_dislikes }}</p>
+                <p class="count_dislikes">-{{ question.get_count_dislikes }}</p>
             </div>
         </div>
     </div>

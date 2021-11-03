@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block link %}
+    <link rel="stylesheet" href="{% static "css/signup_style.css" %}">
+{% endblock link %}
+
+{% block content %}
+    <div class="content">
+        <form action="" class="registration_form">
+            <div class="mb-3">
+                <label for="login" class="form-label">Логин</label>
+                <input type="text" class="form-control" id="login" placeholder="Макс. 20 сим.">
+                <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                    Please choose a username.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" class="form-control" id="email" placeholder="aboba@aboba.as">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Пароль</label>
+                <input type="password" class="form-control" id="password">
+            </div>
+            <div class="mb-3">
+                <label for="repeat_password" class="form-label">Повторите пароль</label>
+                <input type="password" class="form-control" id="repeat_password">
+            </div>
+            <div class="mb-3">
+                <label for="formFile" class="form-label">Аватар</label>
+                <input class="form-control" type="file" id="formFile" accept=".jpg, .png, .jpeg">
+            </div>
+            <button type="submit" class="btn btn-outline-primary send_btn">Зарегистрироваться</button>
+        </form>
+    </div>
+{% endblock content %}

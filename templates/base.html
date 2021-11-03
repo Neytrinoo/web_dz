@@ -7,14 +7,18 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
     <link rel="stylesheet" href="{% static "css/header_styles.css" %}">
+    <link rel="stylesheet" href="{% static "css/footer_style.css" %}">
+    <link rel="stylesheet" href="{% static "css/base_style.css" %}">
     {% block link %}
     {% endblock link %}
     <script src="{% static "js/bootstrap.bundle.js" %}"></script>
 </head>
 <body>
-{% include "incl/header.html" %}
-{% block content %}
-{% endblock content %}
+<main>
+    {% include "incl/header.html" %}
+    {% block content %}
+    {% endblock content %}
+</main>
 {% include "incl/footer.html" %}
 </body>
 </html>

@@ -22,7 +22,7 @@
 }
 
 .row {
-    height: 200px;
+    height: 230px;
     padding-top: 10px;
     padding-left: 15px;
     padding-right: 15px;
@@ -30,6 +30,7 @@
 
 .answers {
     margin-left: 15px;
+    margin-top: 40px;
     float: left;
 }
 
@@ -50,12 +51,14 @@
     width: auto !important;
     background-color: #9a9a9a !important;
     font-size: 0.95em;
+    margin-top: 40px;
 }
 
 .tags_block {
     float: left;
     margin-left: 10px;
     width: 350px;
+    margin-top: 40px;
 }
 
 .question_text {
@@ -65,10 +68,18 @@
     overflow: hidden;
 }
 
+.question_title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+
 .likes {
     float: left;
     margin-left: 7px;
-    margin-top: 10px;
+    margin-top: 40px;
 }
 
 .likes > p {

@@ -1,16 +1,1 @@
-{% extends "base.html" %}
-
-{% load static %}
-
-{% block link %}
-    <link rel="stylesheet" href="{% static "css/question_card_style.css" %}">
-    <link rel="stylesheet" href="{% static "css/index_style.css" %}">
-{% endblock link %}
-
-{% block content %}
-    <div class="questions">
-    {% for question in questions %}
-        {% include "incl/question_card.html" %}
-    {% endfor %}
-    </div>
-{% endblock content %}
+{% extends "questions_page.html" %}
