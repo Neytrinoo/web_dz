@@ -9,29 +9,17 @@
 
 {% block content %}
     <h1 class="questions_title">
-    {% block  title %}
-    {% endblock title %}
+        {% block  title %}
+        {% endblock title %}
     </h1>
     <div class="questions">
         {% for question in page_obj %}
             {% include "incl/question_card.html" %}
         {% endfor %}
     </div>
+    {% block best_all %}
+    {% endblock best_all %}
 
-    <nav aria-label="Page navigation example" class="pagination_nav">
-        <ul class="pagination">
-            {% if page_obj.has_previous %}
-                <li class="page-item"><a class="page-link" href="?page=1"><< First</a></li>
-                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
-            {% endif %}
+    {% include "incl/pagination_nav.html" %}
 
-            {% if page_obj.has_next %}
-                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
-                <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last >></a></li>
-            {% endif %}
-        </ul>
-        <span class="current_page">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-        </span>
-    </nav>
 {% endblock content %}

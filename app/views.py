@@ -3,22 +3,21 @@ from django.core.paginator import Paginator
 from app.models import *
 
 
+def get_pagination_queryset(objects, count_obj, page_num):
+    paginator = Paginator(objects, count_obj)
+    return paginator.get_page(page_num)
+
+
 # Create your views here.
 def index(request):
-    paginator = Paginator(Question.objects.get_new_questions(), 2)
-
-    page_number = request.GET.get('page')
-    questions = paginator.get_page(page_number)
-    return render(request, 'index.html', {'page_obj': questions})
+    questions = get_pagination_queryset(Question.objects.get_new_questions(), 2, request.GET.get('page'))
+    best_tags = Tag.objects.get_popular_tags()[:10]
+    best_users = Profile.objects.get_best_users()[:10]
+    return render(request, 'index.html', {'page_obj': questions, 'best_tags': best_tags, 'best_users': best_users})
 
 
 def question(request, id):
-    question = Question.objects.filter(pk=id).first()
-    paginator = Paginator(question.answers.all(), 2)
-
-    page_number = request.GET.get('page')
-    answers = paginator.get_page(page_number)
-
+    answers = get_pagination_queryset(Question.objects.filter(pk=id).first().answers.all(), 2, request.GET.get('page'))
     return render(request, 'question.html', {'question': question, 'page_obj': answers})
 
 
@@ -35,17 +34,12 @@ def login(request):
 
 
 def hot(request):
-    paginator = Paginator(Question.objects.get_best_questions(), 2)
-
-    page_number = request.GET.get('page')
-    questions = paginator.get_page(page_number)
+    questions = get_pagination_queryset(Question.objects.get_best_questions(), 2, request.GET.get('page'))
     return render(request, 'best_questions.html', {'page_obj': questions})
 
 
 def tag(request, title):
     tag_ = Tag.objects.filter(title=title).first()
-    paginator = Paginator(tag_.questions.all(), 2)
 
-    page_number = request.GET.get('page')
-    questions = paginator.get_page(page_number)
+    questions = get_pagination_queryset(tag_.questions.all(), 2, request.GET.get('page'))
     return render(request, 'tag.html', {'tag': tag_, 'page_obj': questions})

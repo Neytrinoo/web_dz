@@ -1,11 +1,14 @@
 .questions {
     margin-left: 30%;
     margin-top: 40px;
+    width: 840px;
+    float: left;
 }
 
 .pagination {
     text-align: center;
     margin-left: 47%;
+    clear: both;
 }
 
 .pagination_nav {
@@ -16,4 +19,32 @@
 .questions_title {
     text-align: center;
     margin-top: 20px;
+}
+
+.best_tags {
+    margin-top: 100px;
+    float: right;
+    margin-right: 220px;
+}
+
+.tag_block {
+    width: 300px;
+    /*margin: 0 auto;*/
+    /*text-align: center;*/
+}
+
+.best_link_style {
+    font-size: 2rem;
+}
+
+.best_users {
+    margin-top: 30px;
+    float: right;
+    margin-right: 190px;
+}
+
+.best_users_block {
+    width: 300px;
+    margin: 0 auto;
+    text-align: center;
 }

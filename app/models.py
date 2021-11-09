@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User, BaseUserManager
-from datetime import date
+from django.db.models import Count, Q
 from django.urls import reverse
 
 DEFAULT_TEXT_LENGTH = 10000
@@ -19,6 +19,10 @@ class UserManager(BaseUserManager):
         user_obj.save(using=self._db)
         return user_obj
 
+    def get_best_users(self):
+        users = super().get_queryset().annotate(count_questions=Count('question')).order_by('-count_questions')
+        return users
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -31,8 +35,7 @@ class Profile(models.Model):
 
 class TagManager(models.Manager):
     def get_popular_tags(self):
-        tags = super().get_queryset().all()
-        tags = sorted(tags, key=lambda item: item.questions.count())
+        tags = super().get_queryset().annotate(questions_count=Count('question')).order_by('-questions_count')
         return tags
 
 
@@ -46,12 +49,12 @@ class Tag(models.Model):
 
 class QuestionManager(models.Manager):
     def get_best_questions(self):
-        questions = super().get_queryset().all()
-        questions = sorted(questions, key=lambda item: -item.likes.all().filter(like_or_dislike=LikeQuestion.LIKE).count())
+        questions = super().get_queryset().annotate(count_likes=Count('like', filter=Q(like__like_or_dislike=LikeQuestion.LIKE))).order_by(
+            '-count_likes')
         return questions
 
     def get_new_questions(self):
-        return super().get_queryset().all().order_by('date_publish')
+        return super().get_queryset().all().order_by('-date_publish')
 
 
 class Question(models.Model):
