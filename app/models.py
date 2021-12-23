@@ -2,21 +2,22 @@ from django.db import models
 from django.contrib.auth.models import User, BaseUserManager
 from django.db.models import Count, Q
 from django.urls import reverse
+from datetime import datetime
 
 DEFAULT_TEXT_LENGTH = 10000
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password, username, avatar=None):
+    def create_user(self, email, password, username, id, avatar=None):
         pre_user = User(email=email, username=username)
         pre_user.set_password(password)
         pre_user.save()
         user_obj = self.model(
+            id=id,
             user=pre_user
         )
         if avatar is not None:
             user_obj.avatar = avatar
-        user_obj.save(using=self._db)
         return user_obj
 
     def get_best_users(self):
@@ -25,7 +26,8 @@ class UserManager(BaseUserManager):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    id = models.IntegerField(primary_key=True)
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to='uploads/')
     objects = UserManager()
 
@@ -40,7 +42,8 @@ class TagManager(models.Manager):
 
 
 class Tag(models.Model):
-    title = models.CharField(max_length=32, primary_key=True)
+    id = models.IntegerField(primary_key=True)
+    title = models.CharField(max_length=32, unique=True)
     objects = TagManager()
 
     def get_absolute_url(self):
@@ -54,15 +57,16 @@ class QuestionManager(models.Manager):
         return questions
 
     def get_new_questions(self):
-        return super().get_queryset().all().order_by('-date_publish')
+        return super().get_queryset().order_by('-date_publish')
 
 
 class Question(models.Model):
+    id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=256)
     text = models.CharField(max_length=DEFAULT_TEXT_LENGTH)
-    date_publish = models.TimeField(auto_now_add=True)
+    date_publish = models.DateField(default=datetime.now())
     tags = models.ManyToManyField(Tag, related_name='questions', related_query_name='question')
-    author = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='questions', related_query_name='question')
+    author = models.ForeignKey(Profile, null=True, on_delete=models.CASCADE, related_name='questions', related_query_name='question')
 
     objects = QuestionManager()
 
@@ -75,10 +79,14 @@ class Question(models.Model):
     def get_count_dislikes(self):
         return self.likes.filter(like_or_dislike=LikeQuestion.DISLIKE).count()
 
+    def get_date_publish(self):
+        return self.date_publish
+
 
 class Answer(models.Model):
+    id = models.IntegerField(primary_key=True)
     text = models.CharField(max_length=DEFAULT_TEXT_LENGTH)
-    date_publish = models.TimeField(auto_now_add=True)
+    date_publish = models.DateField(default=datetime.now())
     question = models.ForeignKey(Question, related_name='answers', related_query_name='answer', on_delete=models.CASCADE)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='answers', related_query_name='answer')
 
@@ -88,8 +96,12 @@ class Answer(models.Model):
     def get_count_dislikes(self):
         return self.likes.filter(like_or_dislike=LikeAnswer.DISLIKE).count()
 
+    def get_date_publish(self):
+        return str(self.date_publish)
+
 
 class LikeAnswer(models.Model):
+    id = models.IntegerField(primary_key=True)
     LIKE = 1
     DISLIKE = 2
     LIKE_CHOICE = [(LIKE, 'LIKE'), (DISLIKE, 'DISLIKE')]
@@ -99,6 +111,7 @@ class LikeAnswer(models.Model):
 
 
 class LikeQuestion(models.Model):
+    id = models.IntegerField(primary_key=True)
     LIKE = 1
     DISLIKE = 2
     LIKE_CHOICE = [(LIKE, 'LIKE'), (DISLIKE, 'DISLIKE')]

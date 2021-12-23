@@ -1,8 +1,9 @@
 .avatar_on_comment_card {
     border-radius: 50% !important;
     margin-bottom: 3px;
-    width: 70%;
+    width: 100%;
     margin-top: 20px;
+    float: left
 }
 
 .card {
@@ -13,7 +14,7 @@
 
 .col-md-4 {
     display: block;
-    width: 12%;
+    width: 100px;
     text-align: center;
 }
 
@@ -30,6 +31,7 @@
 
 .login_value {
     text-align: center;
+    clear: both;
 }
 
 .question_texts {

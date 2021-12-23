@@ -1,134 +1,196 @@
 from django.core.management.base import BaseCommand
 from app.models import *
+from faker import Faker
+from random import randint, choice
+from mimesis import Generic, Text, Person, Datetime
+from django.db.utils import IntegrityError
 
 
 class Command(BaseCommand):
+    def __init__(self, *args, **kwargs):
+        super().__init__(args, kwargs)
+        self.COUNT_USERS = 15000
+        self.COUNT_TAGS = 12000
+        self.COUNT_MAX_TAGS = 10
+        self.COUNT_QUESTIONS = 150000
+        self.COUNT_ANSWERS = 1500000
+        self.COUNT_QUESTION_LIKES = 1500000
+        self.COUNT_ANSWER_LIKES = 1500000
+        # self.COUNT_USERS = 100
+        # self.COUNT_TAGS = 1000
+        # self.COUNT_MAX_TAGS = 10
+        # self.COUNT_QUESTIONS = 1000
+        # self.COUNT_ANSWERS = 1000
+        # self.COUNT_QUESTION_LIKES = 5000
+        # self.COUNT_ANSWER_LIKES = 5000
+        self.users = []
+        self.questions = []
+        self.answers = []
+        self.tags = []
+        self.question_likes = []
+        self.answers_likes = []
+
     def handle(self, *args, **options):
-        # user = Profile.objects.create_user('aboba1@aboba.ru', 'abobich', 'ab0ba$$', None)
-        # user.save()
-        user1 = Profile.objects.create_user('user1@user.ru', 'user1', 'Ivanoff')
-        user1.save()
-        user2 = Profile.objects.create_user('user2@user.ru', 'user2', 'Petroff')
-        user2.save()
-        user3 = Profile.objects.create_user('user3@user.ru', 'user3', 'Жилда Былда')
-        user3.save()
-        user4 = Profile.objects.create_user('user4@user.ru', 'user4', 'Пупки')
-        user4.save()
+        self.create_users()
+        print('users created')
+        Profile.objects.bulk_create(self.users)
+        print('users save')
 
-        tag1 = Tag(title='python')
-        tag2 = Tag(title='django')
-        tag3 = Tag(title='C++')
-        tag4 = Tag(title='еда')
-        tag5 = Tag(title='готовка')
-        tag6 = Tag(title='животные')
-        tag7 = Tag(title='arduino')
-        tag8 = Tag(title='math')
+        self.create_tags()
+        print('tags created')
+        Tag.objects.bulk_create(self.tags)
+        print('tags save')
 
-        tag1.save()
-        tag2.save()
-        tag3.save()
-        tag4.save()
-        tag5.save()
-        tag6.save()
-        tag7.save()
-        tag8.save()
+        self.create_questions()
+        print('questions created')
+        Question.objects.bulk_create(self.questions)
+        print('questions save')
+        self.create_tags_for_questions()
+        print('questions tags added')
 
-        q1 = self.create_question(
-            title='Command errored out with exit status 1: python setup.py egg_info Check the logs for full command output - '
-                  'while installing auto-py-to-exe through pip',
-            text='I am trying to download auto-py-to-exe on a different (windows) device than I usually use through pip. '
-                 'However when run I get the error (sorry it is so very very long). '
-                 'Even though it does state that I need Visual Studio C++ 14.0 my computer won\'t install it and I have not needed it '
-                 'before. I checked This Stack Overflow Question but it relates to another pip install and has no answers. If the only '
-                 'answer is to install Visual Studio then I am kinda screwed.',
-            author=user1
-        )
+        self.create_answers()
+        print('answers created')
+        Answer.objects.bulk_create(self.answers)
+        print('answers save')
 
-        q1.tags.add(tag1)
-        q1.tags.add(tag2)
+        self.create_question_likes()
+        print('like questions created')
+        LikeQuestion.objects.bulk_create(self.question_likes)
+        print('like questions save')
 
-        q2 = self.create_question(title='How can I convert an image to a 2d matrix?',
-                                  text='I am Making a CNC machine that can print images(basically a printer). But I dont want any software '
-                                       'where I can feed an image and it produces the g-code for me. I want to write my own code that will '
-                                       'convert the image to 2d matrix which I can then feed to the motors through an arduino or some other '
-                                       'microcontroller.',
-                                  author=user2)
-        q2.tags.add(tag3)
-        q2.tags.add(tag7)
+        self.create_answer_likes()
+        print('like answers created')
+        LikeAnswer.objects.bulk_create(self.answers_likes)
+        print('like answers save')
 
-        q3 = self.create_question(title='Stacked Matplotlib Horizontal Bar Chart Python Not Showing all series',
-                                  text='Essentially as of now only 4 of the 5 show up on the chart. When there should be 5 in total.',
-                                  author=user2)
+    def create_users(self):
+        text = Text()
+        logins = text.words(quantity=self.COUNT_USERS)
+        person = Person()
+        for i in range(self.COUNT_USERS):
+            # email = self.fake.unique.email()
+            # name = self.fake.name()
+            # login = self.fake.unique.word()
+            try:
+                email = person.email(unique=True)
+                name = person.full_name()
+                login = logins[i]
+                self.users.append(Profile.objects.create_user(email, name, login, len(self.users) + 1))
+                if i % 500 == 0:
+                    print('users', i)
+            except IntegrityError as e:
+                continue
 
-        q3.tags.add(tag1)
-        q3.tags.add(tag8)
+    def create_tags(self):
+        text = Text()
+        titles = list(set(text.words(quantity=self.COUNT_TAGS)))
+        for i in range(len(titles)):
+            try:
+                self.tags.append(Tag(title=titles[i], id=len(self.tags) + 1))
+                if i % 500 == 0:
+                    print('tags', i)
+            except IntegrityError as e:
+                continue
 
+    def create_questions(self):
+        text_gen = Text()
+        datet = Datetime()
+        for i in range(self.COUNT_QUESTIONS):
+            q_text = text_gen.text(quantity=randint(1, 30))
+            q_title = text_gen.text(quantity=randint(1, 3))
+            self.questions.append(self.create_question(
+                title=q_title,
+                text=q_text,
+                author=self.get_random_user(),
+                id=len(self.questions) + 1,
+                date=datet.datetime(start=2007, end=2021)
+            ))
 
-        q4 = self.create_question(title='TypeError: argument of type \'WindowsPath\' is not iterable',
-                                  text='''I got the following error when running pytest:
+    def create_tags_for_questions(self):
+        for i in range(len(self.questions)):
+            through_obj = []
+            for j in range(randint(1, self.COUNT_MAX_TAGS)):
+                through_obj.append(Question.tags.through(question_id=self.questions[i].id, tag_id=self.get_random_tag().id))
+            try:
+                Question.tags.through.objects.bulk_create(through_obj)
+            except IntegrityError:
+                pass
+            if i % 1000 == 0:
+                print('questions tag add', i)
 
->           needquote = (" " in arg) or ("\t" in arg) or not arg
-E           TypeError: 'WindowsPath' object is not iterable
-TypeError: argument of type 'WindowsPath' is not iterable
-...\Miniconda3\envs\manubot-dev\lib\subprocess.py:461: TypeError
-I fixed this by converting path to str:
-Line 461: needquote = (" " in str(arg)) or ("\t" in str(arg)) or not str(arg)
-Line 465: for c in str(arg):
+    def create_answers(self):
+        text_gen = Text()
+        datet = Datetime()
+        for i in range(self.COUNT_ANSWERS):
+            a_text = text_gen.text(quantity=randint(1, 30))
+            self.answers.append(self.create_answer(a_text, self.get_random_user(),
+                                                   self.get_random_question(), len(self.answers) + 1,
+                                                   datet.datetime(start=2007, end=2021)))
+            if i % 5000 == 0:
+                print('answers', i)
 
-.. according to this suggestion.
+    def create_question_likes(self):
+        for i in range(self.COUNT_QUESTION_LIKES):
+            like_or_dislike = randint(1, 2)
+            if like_or_dislike == 1:
+                self.question_likes.append(
+                    self.like_question(self.get_random_question(), self.get_random_user(), len(self.question_likes) + 1))
+            else:
+                self.question_likes.append(
+                    self.dislike_question(self.get_random_question(), self.get_random_user(), len(self.question_likes) + 1))
+            if i % 10000 == 0:
+                print('question likes', i)
 
-My programming background is pretty limited and I am not sure whether this solution fits for all, thus I am sharing it here (and not directly committing).''',
-                                  author=user3)
+    def create_answer_likes(self):
+        for i in range(self.COUNT_ANSWER_LIKES):
+            like_or_dislike = randint(1, 2)
+            if like_or_dislike == 1:
+                self.answers_likes.append(self.like_answer(self.get_random_answer(), self.get_random_user(), len(self.answers_likes) + 1))
+            else:
+                self.answers_likes.append(
+                    self.dislike_answer(self.get_random_answer(), self.get_random_user(), len(self.answers_likes) + 1))
 
-        q4.tags.add(tag1)
+            if i % 10000 == 0:
+                print('answer likes', i)
 
-        a1 = self.create_answer('Потому что гладиолус 1', user2, q1)
-        a2 = self.create_answer('Потому что гладиолус 2', user3, q1)
-        a3 = self.create_answer('Потому что гладиолус 3', user3, q1)
-        a4 = self.create_answer('Потому что гладиолус 4', user2, q1)
-        a5 = self.create_answer('Потому что гладиолус 5', user4, q1)
-        a6 = self.create_answer('Потому что гладиолус 6', user4, q1)
+    def get_random_user(self):
+        return choice(self.users)
 
-        a7 = self.create_answer('Да кто его знает :0', user1, q2)
-        a8 = self.create_answer('Не могу ответить емае', user3, q2)
-        a9 = self.create_answer('Это очевидно друг мой', user3, q2)
-        a10 = self.create_answer('hihi haha', user1, q2)
-        a11 = self.create_answer('Потому что гладиолус 5', user4, q2)
-        a12 = self.create_answer('Потому что гладиолус 6', user4, q2)
+    def get_random_question(self):
+        return choice(self.questions)
 
-        self.like_question(q1, user2)
-        self.like_question(q1, user3)
-        self.dislike_question(q1, user4)
+    def get_random_answer(self):
+        return choice(self.answers)
 
-        self.like_answer(a1, user1)
-        self.like_answer(a1, user2)
-        self.like_answer(a3, user3)
-        self.dislike_answer(a1, user3)
+    def get_random_tag(self):
+        return choice(self.tags)
 
-    def create_question(self, title, text, author):
-        question = Question(title=title, text=text, author=author)
-        question.save()
+    def create_question(self, title, text, author, id, date):
+        question = Question(title=title, text=text, author=author, id=id, date_publish=date)
 
         return question
 
-    def create_answer(self, text, author, question):
-        answer = Answer(text=text, author=author, question=question)
-        answer.save()
+    def create_answer(self, text, author, question, id, date):
+        answer = Answer(text=text, author=author, question=question, id=id, date_publish=date)
 
         return answer
 
-    def like_question(self, question, user):
-        like = LikeQuestion(like_or_dislike=LikeQuestion.LIKE, question=question, user=user)
-        like.save()
+    def like_question(self, question, user, id):
+        like = LikeQuestion(like_or_dislike=LikeQuestion.LIKE, question=question, user=user, id=id)
 
-    def dislike_question(self, question, user):
-        like = LikeQuestion(like_or_dislike=LikeQuestion.DISLIKE, question=question, user=user)
-        like.save()
+        return like
 
-    def like_answer(self, answer, user):
-        like = LikeAnswer(like_or_dislike=LikeAnswer.LIKE, answer=answer, user=user)
-        like.save()
+    def dislike_question(self, question, user, id):
+        like = LikeQuestion(like_or_dislike=LikeQuestion.DISLIKE, question=question, user=user, id=id)
 
-    def dislike_answer(self, answer, user):
-        like = LikeAnswer(like_or_dislike=LikeAnswer.DISLIKE, answer=answer, user=user)
-        like.save()
+        return like
+
+    def like_answer(self, answer, user, id):
+        like = LikeAnswer(like_or_dislike=LikeAnswer.LIKE, answer=answer, user=user, id=id)
+
+        return like
+
+    def dislike_answer(self, answer, user, id):
+        like = LikeAnswer(like_or_dislike=LikeAnswer.DISLIKE, answer=answer, user=user, id=id)
+
+        return like
