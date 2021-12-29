@@ -10,9 +10,10 @@
 {% block content %}
     <div class="content">
         <div class="question">
-            <div class="header">
+            <div class="question_header">
                 <div class="author">
-                    <a href=""><img href="#" src="{% static "img/default_avatar_img.png" %}" alt="" class="avatar_on_question"></a>
+                    <a href=""><img href="#" src="{% static "img/default_avatar_img.png" %}" alt=""
+                                    class="avatar_on_question"></a>
                     <a class="link-success login_value" href="#">{{ question.author.user.username }}</a>
                 </div>
                 <p class="lead question_title">
@@ -29,10 +30,13 @@
             <hr>
             <p class="question_text">{{ question.text }}</p>
         </div>
-        <div class="form-floating comment_form">
-            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
-            <label for="floatingTextarea2">Комментарий</label>
-        </div>
+        <form action="">
+            <div class="form-floating comment_form">
+                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
+                          style="height: 100px"></textarea>
+                <label for="floatingTextarea2">Комментарий</label>
+            </div>
+        </form>
         <button type="button" class="btn btn-outline-primary send_comment_btn">Отправить</button>
         <div class="all_comments">
             <p class="lead comments_title">

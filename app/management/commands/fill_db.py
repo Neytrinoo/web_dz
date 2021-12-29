@@ -9,13 +9,13 @@ from django.db.utils import IntegrityError
 class Command(BaseCommand):
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)
-        self.COUNT_USERS = 15000
-        self.COUNT_TAGS = 12000
+        self.COUNT_USERS = 150
+        self.COUNT_TAGS = 120
         self.COUNT_MAX_TAGS = 10
-        self.COUNT_QUESTIONS = 150000
-        self.COUNT_ANSWERS = 1500000
-        self.COUNT_QUESTION_LIKES = 1500000
-        self.COUNT_ANSWER_LIKES = 1500000
+        self.COUNT_QUESTIONS = 1500
+        self.COUNT_ANSWERS = 15000
+        self.COUNT_QUESTION_LIKES = 15000
+        self.COUNT_ANSWER_LIKES = 15000
         # self.COUNT_USERS = 100
         # self.COUNT_TAGS = 1000
         # self.COUNT_MAX_TAGS = 10
@@ -75,7 +75,7 @@ class Command(BaseCommand):
                 email = person.email(unique=True)
                 name = person.full_name()
                 login = logins[i]
-                self.users.append(Profile.objects.create_user(email, name, login, len(self.users) + 1))
+                self.users.append(Profile.objects.create_user(email, login, login))
                 if i % 500 == 0:
                     print('users', i)
             except IntegrityError as e:
@@ -177,20 +177,24 @@ class Command(BaseCommand):
 
     def like_question(self, question, user, id):
         like = LikeQuestion(like_or_dislike=LikeQuestion.LIKE, question=question, user=user, id=id)
+        question.like()
 
         return like
 
     def dislike_question(self, question, user, id):
         like = LikeQuestion(like_or_dislike=LikeQuestion.DISLIKE, question=question, user=user, id=id)
+        question.dislike()
 
         return like
 
     def like_answer(self, answer, user, id):
         like = LikeAnswer(like_or_dislike=LikeAnswer.LIKE, answer=answer, user=user, id=id)
+        answer.like()
 
         return like
 
     def dislike_answer(self, answer, user, id):
         like = LikeAnswer(like_or_dislike=LikeAnswer.DISLIKE, answer=answer, user=user, id=id)
+        answer.dislike()
 
         return like

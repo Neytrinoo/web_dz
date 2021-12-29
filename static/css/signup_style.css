@@ -9,24 +9,47 @@
     height: inherit;
 }
 
+.login_form {
+    margin-top: 40px;
+    width: inherit;
+    height: inherit;
+    margin-left: 35%;
+}
+
+.reg_btn {
+    margin-top: 20px;
+}
+
 .mb-3 {
     float: left;
     width: 100%;
 }
 
-.form-label {
-    float:left;
+.form-group label {
+    float: left;
     font-size: 1.25rem;
     font-weight: 400;
+    clear: left;
 }
 
-.form-control {
-    float: right;
-    width: 1000px;
+.input_style {
+    float: left;
+    width: 200px;
+    margin-left: 50px;
+}
+
+#password {
+    margin-left: 55px;
+    margin-top: 10px;
 }
 
 .invalid-feedback {
     display: block !important;
-    clear:both;
+    clear: both;
     text-align: right;
+}
+
+.send_btn {
+    float: left;
+    clear: both;
 }

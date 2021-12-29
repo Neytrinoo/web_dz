@@ -2,10 +2,13 @@
     max-width: 1200px;
     margin: 0 auto;
 }
-
-.form-label {
+.form-group {
+    margin-top: 30px;
+}
+label {
     font-size: 1.25rem;
     font-weight: 400;
+    float: left;
 }
 
 .question_form {
@@ -22,6 +25,7 @@
     min-height: 700px;
     max-height: 700px;
     font-size: 1.15rem;
+    margin-top: 20px;
 }
 
 .col-form-label {
@@ -40,4 +44,5 @@
 .send_btn {
     width: 1200px;
     margin: 0 auto;
+    margin-top: 40px;
 }

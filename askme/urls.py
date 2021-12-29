@@ -25,5 +25,7 @@ urlpatterns = [
     path('sign_up', sign_up, name='sign_up'),
     path('login', login, name='login'),
     path('hot', hot, name='hot'),
-    path('tag/<str:title>', tag, name='tag')
+    path('tag/<str:title>', tag, name='tag'),
+    path('logout', logout, name='logout'),
+    path('profile/edit', edit_profile, name='edit_profile')
 ]

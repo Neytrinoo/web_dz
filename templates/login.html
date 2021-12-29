@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load static %}
+{% load bootstrap4 %}
 
 {% block link %}
     <link rel="stylesheet" href="{% static "css/signup_style.css" %}">
@@ -8,19 +9,24 @@
 
 {% block content %}
     <div class="content">
-        <form action="" class="registration_form">
-            <div class="mb-3">
-                <label for="login" class="form-label">Логин</label>
-                <input type="text" class="form-control" id="login" placeholder="Макс. 20 сим.">
-                <div id="validationServerUsernameFeedback" class="invalid-feedback">
-                    Please choose a username.
-                </div>
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Пароль</label>
-                <input type="password" class="form-control" id="password">
-            </div>
-            <button type="submit" class="btn btn-outline-primary send_btn">Войти</button>
+        <form action="{% url 'login' %}?continue={% url 'hot' %}" class="login_form" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            {% buttons %}
+                <button type="submit" class="btn btn-outline-primary send_btn">Войти</button>
+            {% endbuttons %}
+{#            <div class="mb-3">#}
+{#                <label for="login" class="form-label">Логин</label>#}
+{#                <input type="text" class="form-control" id="login" placeholder="Макс. 20 сим.">#}
+{#                <div id="validationServerUsernameFeedback" class="invalid-feedback">#}
+{#                    Please choose a username.#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="mb-3">#}
+{#                <label for="password" class="form-label">Пароль</label>#}
+{#                <input type="password" class="form-control" id="password">#}
+{#            </div>#}
+{#            <button type="submit" class="btn btn-outline-primary send_btn">Войти</button>#}
         </form>
     </div>
 {% endblock content %}

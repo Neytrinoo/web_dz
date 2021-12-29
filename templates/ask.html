@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load static %}
+{% load bootstrap4 %}
 
 {% block link %}
     <link rel="stylesheet" href="{% static "css/ask_style.css" %}">
@@ -8,22 +9,27 @@
 
 {% block content %}
     <div class="content">
-        <form action="" class="question_form">
-            <div class="mb-3">
-                <label for="questionTitle" class="form-label">Заголовок вопроса</label>
-                <input type="text" class="form-control" id="questionTitle" placeholder="По чему плавают утки?">
-            </div>
-            <div class="mb-3">
-                <label for="questionText" class="form-label">Текст вопроса</label>
-                <textarea class="form-control" id="questionText" rows="3"></textarea>
-            </div>
-            <div class="mb-3 row">
-                <label for="inputPassword" class="col-sm-2 col-form-label">Теги</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputTags" placeholder="Через запятую">
-                </div>
-            </div>
-            <button type="submit" class="btn btn-outline-primary send_btn">Отправить</button>
+        <form action="{% url 'ask' %}" class="question_form" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            {% buttons %}
+                <button type="submit" class="btn btn-outline-primary send_btn">Отправить</button>
+            {% endbuttons %}
+            {#            <div class="mb-3">#}
+            {#                <label for="questionTitle" class="form-label">Заголовок вопроса</label>#}
+            {#                <input type="text" class="form-control" id="questionTitle" placeholder="По чему плавают утки?">#}
+            {#            </div>#}
+            {#            <div class="mb-3">#}
+            {#                <label for="questionText" class="form-label">Текст вопроса</label>#}
+            {#                <textarea class="form-control" id="questionText" rows="3"></textarea>#}
+            {#            </div>#}
+            {#            <div class="mb-3 row">#}
+            {#                <label for="inputPassword" class="col-sm-2 col-form-label">Теги</label>#}
+            {#                <div class="col-sm-10">#}
+            {#                    <input type="text" class="form-control" id="inputTags" placeholder="Через запятую">#}
+            {#                </div>#}
+            {#            </div>#}
+            {#            <button type="submit" class="btn btn-outline-primary send_btn">Отправить</button>#}
         </form>
     </div>
 {% endblock content %}

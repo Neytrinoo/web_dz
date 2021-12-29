@@ -1,6 +1,6 @@
 .d-flex {
     width: 30%;
-    margin-right: 10%;
+    margin-right: 15%;
 }
 
 .avatar_img > img {
@@ -28,4 +28,8 @@
 
 .logout_link {
     color: red;
+}
+
+.header {
+    height: 86px;
 }

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load bootstrap4 %}
+
+{% block link %}
+    <link rel="stylesheet" href="{% static "css/signup_style.css" %}">
+{% endblock link %}
+
+{% block content %}
+    <div class="content">
+        <form action="{% url 'edit_profile' %}" method="post" class="registration_form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+        <button type="submit" class="btn btn-outline-primary send_btn reg_btn">Редактировать</button>
+        {% endbuttons %}
+        </form>
+</div>
+{% endblock content %}
